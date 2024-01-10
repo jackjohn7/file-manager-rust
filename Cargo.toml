@@ -1,0 +1,9 @@
+
+[workspace]
+
+members = [
+  "gui",
+  "tui",
+  "utils",
+  #"tauri"
+]
