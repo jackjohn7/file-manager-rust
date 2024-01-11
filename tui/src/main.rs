@@ -1,31 +1,25 @@
-use std::{io::{self, stdout}, env::{current_dir, set_current_dir}, cmp::Ordering};
+mod events;
+mod state;
+
+use std::{io::{self, stdout}, env::current_dir, cmp::Ordering};
 use utils::{files_in_dir, FolderItem};
 use std::fmt::Write;
 
 use crossterm::{
-    event::{self, Event, KeyCode},
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
     ExecutableCommand,
 };
 use ratatui::{prelude::*, widgets::*};
-
-enum AppMode {
-    Browse,
-    BrowseSearch,
-}
-
-enum AppTrigger {
-    Refresh
-}
-
-struct AppState {
-    mode: AppMode,
-    line: usize,
-    scroll_offset: usize,
-    files: Vec<FolderItem>,
-    trigger: Option<AppTrigger>,
-    pg_height: Option<usize>,
-}
+use crate::{
+    state::{
+        AppMode,
+        AppState,
+    },
+    events::{
+        key_events::handle_events,
+        triggers::handle_triggers
+    }
+};
 
 fn main() -> io::Result<()> {
     enable_raw_mode()?;
@@ -37,15 +31,7 @@ fn main() -> io::Result<()> {
     let mut should_quit = false;
     while !should_quit {
         // if trigger update, need to fetch files again
-        if let Some(trigger) = app_state.trigger {
-            match trigger {
-                AppTrigger::Refresh => {
-                    app_state.files = files_in_dir(current_dir().unwrap().as_path());
-                    app_state.scroll_offset = 0;
-                }
-            }
-            app_state.trigger = None;
-        }
+        let _ = handle_triggers(&mut app_state);
         terminal.draw(|frame| ui(frame, &mut app_state))?;
         should_quit = handle_events(&mut app_state)?;
     }
@@ -55,68 +41,6 @@ fn main() -> io::Result<()> {
     Ok(())
 }
 
-fn handle_events(state: &mut AppState) -> io::Result<bool> {
-    if event::poll(std::time::Duration::from_millis(50))? {
-        if let Event::Key(key) = event::read()? {
-            if key.kind == event::KeyEventKind::Press && key.code == KeyCode::Char('q') {
-                return Ok(true);
-            }
-            else if key.kind == event::KeyEventKind::Press && key.code == KeyCode::Char('j') {
-                match state.mode {
-                    AppMode::Browse => {
-                        if (state.line as i32) < (state.files.len() as i32)-1 {
-                            state.line += 1;
-                        }
-                        // when moving 5 items from the bottom, scroll down a bit
-                        if let Some(pg_height) = state.pg_height {
-                            if ((pg_height as i32 - state.line as i32) < 5) && (state.files.len() as i32 - state.line as i32) > 5 {
-                                state.scroll_offset += 1;
-                            }
-                        }
-                    }
-                    _ => {}
-                }
-            }
-            else if key.kind == event::KeyEventKind::Press && key.code == KeyCode::Char('k') {
-                match state.mode {
-                    AppMode::Browse => {
-                        if state.line > 0 {
-                            state.line -= 1;
-                        }
-                        // when moving 5 items from the bottom, scroll up a bit
-                        if (state.scroll_offset > 0) && (state.files.len() as i32 - state.line as i32) > 5{
-                            state.scroll_offset -= 1;
-                        }
-                    },
-                    _ => {}
-                }
-            }
-            else if key.kind == event::KeyEventKind::Press && key.code == KeyCode::Char('l') {
-                match &state.files[state.line] {
-                    FolderItem::Directory(dir) => {
-                        set_current_dir(&dir.path).unwrap();
-                        state.line = 0;
-                        state.trigger = Some(AppTrigger::Refresh);
-                    },
-                    _ => {}
-                }
-            }
-            else if key.kind == event::KeyEventKind::Press && key.code == KeyCode::Char('h') {
-                set_current_dir("..").unwrap();
-                state.line = 0;
-                state.trigger = Some(AppTrigger::Refresh);
-            }
-            else if key.kind == event::KeyEventKind::Press && key.code == KeyCode::Char('/') {
-                // put the manager into search mode
-                state.mode = match state.mode {
-                    AppMode::Browse => AppMode::BrowseSearch,
-                    AppMode::BrowseSearch => AppMode::Browse // just go back for now
-                };
-            }
-        }
-    }
-    Ok(false)
-}
 
 fn list_files(files: &Vec<FolderItem>) -> String {
     let mut result = String::new();
@@ -147,7 +71,10 @@ fn ui(frame: &mut Frame, state: &mut AppState) {
         .collect();
 
     let block = Block::default()
-        .title(format!("{}", current_dir().unwrap().to_str().unwrap()))
+        .title(format!("{} Location: {}", match state.mode {
+            AppMode::Browse => "Browsing",
+            AppMode::BrowseSearch => "Searching"
+        }, current_dir().unwrap().to_str().unwrap()))
         .borders(Borders::ALL);
 
     frame.render_widget(block.clone(), frame.size());
