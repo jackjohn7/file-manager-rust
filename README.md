@@ -1,6 +1,6 @@
 # File Managers in Rust
 
-<img src="/assets/browse_mode.png">
+<img src="/assets/browsing_mode.png">
 
 I'm writing some basic file management tools in Rust to get a feel for
 some of the filesystem functions.
