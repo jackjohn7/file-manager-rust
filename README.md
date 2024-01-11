@@ -23,6 +23,10 @@ you didn't intend to. You have been warned.
 
 ## TODO
 
+### Implementation Details
+
+- Search should be case-insensitive
+
 ### Interface
 
 - `--paths-relative` flag specifies that paths should be displayed relative to where 
