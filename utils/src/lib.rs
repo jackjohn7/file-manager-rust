@@ -14,6 +14,13 @@ pub enum FolderItem {
     Directory(Metadata)
 }
 
+pub fn open_in_default(metadata: &Metadata) -> Result<(), &'static str> {
+    match opener::open(metadata.path.clone()) {
+        Ok(_) => Ok(()),
+        Err(_) => Err("Failed to open file")
+    }
+}
+
 /// lists files in the given directory
 pub fn files_in_dir(path: &Path) -> Vec<FolderItem> {
     fs::read_dir(path)

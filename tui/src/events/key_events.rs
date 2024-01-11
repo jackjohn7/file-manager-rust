@@ -3,7 +3,7 @@ use std::{io, env::set_current_dir};
 use crate::state::{AppMode, AppState};
 use crate::events::triggers::AppTrigger;
 use crossterm::event::{self, Event, KeyCode};
-use utils::FolderItem;
+use utils::{FolderItem, open_in_default};
 
 
 pub fn handle_events(state: &mut AppState) -> io::Result<bool> {
@@ -40,6 +40,8 @@ pub fn handle_events(state: &mut AppState) -> io::Result<bool> {
                             if let FolderItem::Directory(dir) = &state.files[state.line] {
                                 set_current_dir(&dir.path).unwrap();
                                 state.trigger = Some(AppTrigger::Refresh);
+                            } else if let FolderItem::File(file) = &state.files[state.line] {
+                                open_in_default(file).unwrap();
                             }
                         }
                         else if key.kind == event::KeyEventKind::Press && key.code == KeyCode::Char('h') {
