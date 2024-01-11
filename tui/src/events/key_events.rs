@@ -78,6 +78,9 @@ pub fn handle_events(state: &mut AppState) -> io::Result<bool> {
                         else if key.kind == event::KeyEventKind::Press && key.code == KeyCode::Char('n') {
                             state.config.numbering = !state.config.numbering;
                         }
+                        else if key.kind == event::KeyEventKind::Press && key.code == KeyCode::Char('f') {
+                            state.config.show_full_path = !state.config.show_full_path;
+                        }
                     }
                     // WHEN IN BROWSESEARCH MODE
                     AppMode::BrowseSearch => {

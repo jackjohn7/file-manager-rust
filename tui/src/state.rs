@@ -17,12 +17,14 @@ pub struct AppState {
     pub config: AppConfig
 }
 
+#[derive(Default)]
 pub struct AppConfig {
     pub numbering: bool,
+    pub show_full_path: bool,
 }
 
-impl Default for AppConfig {
-    fn default() -> Self {
-        Self { numbering: false }
-    }
-}
+//impl Default for AppConfig {
+//    fn default() -> Self {
+//        Self { numbering: false, show_full_path: false }
+//    }
+//}

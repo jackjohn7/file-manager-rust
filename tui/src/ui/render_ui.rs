@@ -6,15 +6,25 @@ use std::fmt::Write;
 
 use crate::state::{AppState, AppMode, AppConfig};
 
-pub fn list_files(files: &Vec<FolderItem>, config: &AppConfig) -> String {
+pub fn list_files(files: &[FolderItem], config: &AppConfig) -> String {
     let mut result = String::new();
-    for (idx, f) in files.into_iter().enumerate() {
+    for (idx, f) in files.iter().enumerate() {
         if config.numbering {
-            write!(result, "{}  ", idx+1);
+            write!(result, "{}  ", idx+1).unwrap();
         }
         writeln!(result, "{}", match f {
-            FolderItem::Directory(dir) => format!("Dir        {}", dir.path.to_str().unwrap()),
-            FolderItem::File(fil) => format!("File       {}", fil.path.to_str().unwrap()),
+            FolderItem::Directory(dir) => format!("Dir        {}",
+                match config.show_full_path {
+                    true => dir.path.to_str().unwrap().to_string(),
+                    false => dir.name_str.clone()
+                }
+            ),
+            FolderItem::File(fil) => format!("File       {}",
+                match config.show_full_path {
+                    true => fil.path.to_str().unwrap().to_string(),
+                    false => fil.name_str.clone()
+                }
+            ),
         },).unwrap();
     }
     result

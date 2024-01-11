@@ -22,6 +22,7 @@ Danger is a rust-based TUI file manager inspired by Ranger as you can probably t
 ### Interface
 
 - `--nav` flag navigates user to their last visited folder upon exiting
+- `--full-paths` flag specifies that files and directories should display full path rather than just the name
 
 ### Actions
 
@@ -62,4 +63,5 @@ Danger is a rust-based TUI file manager inspired by Ranger as you can probably t
     - *Note*: This is also how you remove your filter afterwards. `/-ESC`
   - `ENTER` will exit search mode and apply search string
 - Use `n` to toggle the numbering of files
+- Use `f` to toggle display of full path for files
 
