@@ -6,20 +6,30 @@ use std::fmt::Write;
 
 use crate::state::{AppState, AppMode, AppConfig};
 
+fn length(n: usize) -> usize {
+    n.checked_ilog10().unwrap_or(0) as usize + 1
+}
+
 pub fn list_files(files: &[FolderItem], config: &AppConfig) -> String {
     let mut result = String::new();
     for (idx, f) in files.iter().enumerate() {
         if config.numbering {
-            write!(result, "{}  ", idx+1).unwrap();
+            let mut spaces = String::new();
+            for _ in length(idx+1)..length(files.len())+2 {
+                spaces.push(' ');
+            }
+            write!(result, "{}:{}", idx+1,
+                   spaces
+            ).unwrap();
         }
         writeln!(result, "{}", match f {
-            FolderItem::Directory(dir) => format!("Dir        {}",
+            FolderItem::Directory(dir) => format!("{}/",
                 match config.show_full_path {
                     true => dir.path.to_str().unwrap().to_string(),
                     false => dir.name_str.clone()
                 }
             ),
-            FolderItem::File(fil) => format!("File       {}",
+            FolderItem::File(fil) => format!("{}",
                 match config.show_full_path {
                     true => fil.path.to_str().unwrap().to_string(),
                     false => fil.name_str.clone()
