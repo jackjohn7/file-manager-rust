@@ -39,6 +39,7 @@ pub fn handle_events(state: &mut AppState) -> io::Result<bool> {
                         else if key.kind == event::KeyEventKind::Press && key.code == KeyCode::Char('l') {
                             if let FolderItem::Directory(dir) = &state.files[state.line] {
                                 set_current_dir(&dir.path).unwrap();
+                                state.search_string = String::new();
                                 state.trigger = Some(AppTrigger::Refresh);
                             } else if let FolderItem::File(file) = &state.files[state.line] {
                                 open_in_default(file).unwrap();
@@ -46,6 +47,7 @@ pub fn handle_events(state: &mut AppState) -> io::Result<bool> {
                         }
                         else if key.kind == event::KeyEventKind::Press && key.code == KeyCode::Char('h') {
                             set_current_dir("..").unwrap();
+                            state.search_string = String::new();
                             state.trigger = Some(AppTrigger::Refresh);
                         }
                         else if key.kind == event::KeyEventKind::Press && key.code == KeyCode::Char('b') {

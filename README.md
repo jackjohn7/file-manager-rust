@@ -25,9 +25,6 @@ you didn't intend to. You have been warned.
 
 ### Interface
 
-- Allow command to take a folder as argument ("." is default)
-- `--nav` flag navigates user to wherever the user exits the program in.
-- `--full-paths` flag specifies that files and directories should display full path rather than just the name
 - `--paths-relative` flag specifies that paths should be displayed relative to where 
 danger was opened.
 
@@ -63,6 +60,11 @@ danger was opened.
 `cd file-manager-rust`
 
 `cargo run --bin tui`
+
+## Args
+
+- `--input` flag sets the current directory
+- `--full-paths` flag specifies that files and directories should display full path rather than just the name
 
 ## Controls
 

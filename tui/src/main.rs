@@ -1,8 +1,11 @@
 mod events;
 mod state;
 mod ui;
+mod commands;
 
-use std::{io::{self, stdout}, env::current_dir};
+use std::{io::{self, stdout}, env::{current_dir, set_current_dir}};
+use commands::args;
+use clap::Parser;
 use utils::files_in_dir;
 
 use crossterm::{
@@ -23,6 +26,11 @@ use crate::{
 };
 
 fn main() -> io::Result<()> {
+
+    let args = args::DangerArgs::parse();
+
+    set_current_dir(args.input).expect("Invalid input provided. Ensure path is valid");
+
     enable_raw_mode()?;
     stdout().execute(EnterAlternateScreen)?;
     let mut terminal = Terminal::new(CrosstermBackend::new(stdout()))?;
@@ -37,6 +45,7 @@ fn main() -> io::Result<()> {
         config: AppConfig::default()
     };
     app_state.files = files_in_dir(current_dir().unwrap().as_path());
+    app_state.config.show_full_path = args.full_paths;
 
     let mut should_quit = false;
     while !should_quit {

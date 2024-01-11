@@ -9,3 +9,4 @@ edition = "2021"
 utils = { path = "../utils" }
 crossterm = "0.27.0"
 ratatui = "0.25.0"
+clap = { version = "4.4.15", features = ["derive"] }
