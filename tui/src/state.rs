@@ -13,4 +13,16 @@ pub struct AppState {
     pub files: Vec<FolderItem>,
     pub trigger: Option<AppTrigger>,
     pub pg_height: Option<usize>,
+    pub search_string: String,
+    pub config: AppConfig
+}
+
+pub struct AppConfig {
+    pub numbering: bool,
+}
+
+impl Default for AppConfig {
+    fn default() -> Self {
+        Self { numbering: false }
+    }
 }

@@ -1,5 +1,6 @@
 use std::{path::{PathBuf, Path}, fs, time::SystemTime};
 
+#[derive(Clone)]
 pub struct Metadata {
     pub path: PathBuf,
     pub name_str: String,
@@ -7,6 +8,7 @@ pub struct Metadata {
     pub is_symlink: bool
 }
 
+#[derive(Clone)]
 pub enum FolderItem {
     File(Metadata),
     Directory(Metadata)
