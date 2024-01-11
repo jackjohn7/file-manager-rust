@@ -15,17 +15,25 @@ I will be doing the same thing in Go!
 
 <img src="/assets/browsing_mode.png">
 
-Danger is a rust-based TUI file manager inspired by Ranger as you can probably tell.
+Danger is a minimal rust-based TUI file manager inspired by Ranger and Vim.
+
+Danger is a work-in-progress, and I wouldn't recommend anyone use it as their
+primary file manager. There is a chance a bug results in you deleting something 
+you didn't intend to. You have been warned.
 
 ## TODO
 
 ### Interface
 
 - Allow command to take a folder as argument ("." is default)
-- `--nav` flag navigates user to their last visited folder upon exiting
+- `--nav` flag navigates user to wherever the user exits the program in.
 - `--full-paths` flag specifies that files and directories should display full path rather than just the name
+- `--paths-relative` flag specifies that paths should be displayed relative to where 
+danger was opened.
 
 ### Actions
+
+- Number keys allow a user to specify the yanking or cutting of multiple files/folders
 
 - <kbd>a</kbd> allows a user to create a new file
   - <kbd>ESC</kbd> cancels this
