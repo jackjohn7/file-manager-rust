@@ -11,6 +11,7 @@ use ratatui::{prelude::*, widgets::*};
 
 enum AppMode {
     Browse,
+    BrowseSearch,
 }
 
 enum AppTrigger {
@@ -73,6 +74,7 @@ fn handle_events(state: &mut AppState) -> io::Result<bool> {
                             }
                         }
                     }
+                    _ => {}
                 }
             }
             else if key.kind == event::KeyEventKind::Press && key.code == KeyCode::Char('k') {
@@ -85,7 +87,8 @@ fn handle_events(state: &mut AppState) -> io::Result<bool> {
                         if (state.scroll_offset > 0) && (state.files.len() as i32 - state.line as i32) > 5{
                             state.scroll_offset -= 1;
                         }
-                    }
+                    },
+                    _ => {}
                 }
             }
             else if key.kind == event::KeyEventKind::Press && key.code == KeyCode::Char('l') {
@@ -102,6 +105,13 @@ fn handle_events(state: &mut AppState) -> io::Result<bool> {
                 set_current_dir("..").unwrap();
                 state.line = 0;
                 state.trigger = Some(AppTrigger::Refresh);
+            }
+            else if key.kind == event::KeyEventKind::Press && key.code == KeyCode::Char('/') {
+                // put the manager into search mode
+                state.mode = match state.mode {
+                    AppMode::Browse => AppMode::BrowseSearch,
+                    AppMode::BrowseSearch => AppMode::Browse // just go back for now
+                };
             }
         }
     }
