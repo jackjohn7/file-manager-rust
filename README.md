@@ -21,23 +21,25 @@ Danger is a rust-based TUI file manager inspired by Ranger as you can probably t
 
 ### Interface
 
+- Allow command to take a folder as argument ("." is default)
 - `--nav` flag navigates user to their last visited folder upon exiting
 - `--full-paths` flag specifies that files and directories should display full path rather than just the name
 
 ### Actions
 
-- `a` allows a user to create a new file
-  - `ESC` cancels this
-  - `ENTER` confirms this
-- `y` initiates a yank (copy)
-  - `y` completes a yank
-  - `ESC` cancels a yank
+- <kbd>a</kbd> allows a user to create a new file
+  - <kbd>ESC</kbd> cancels this
+  - <kbd>ENTER</kbd> confirms this
+- <kbd>y</kbd> initiates a yank (copy)
+  - <kbd>y</kbd> completes a yank
+  - <kbd>ESC</kbd> cancels a yank
   - *Note*: In the case of name collision, a "(n)" is appended where $n$ is a counting integer.
-- `d` allows a user to delete a file or folder recursively
-  - `d` allows a user to perform a cut
-  - `ENTER` confirms
-  - `ESC` cancels this
-- `l` on a file opens the file in default application
+- <kbd>d</kbd> allows a user to delete a file or folder recursively
+  - <kbd>d</kbd> allows a user to perform a cut
+  - <kbd>ENTER</kbd> confirms
+  - <kbd>ESC</kbd> cancels this
+- <kbd>l</kbd> on a file opens the file in default application
+- <kbd>p</kbd> Allows a user to paste copied or cut content
 
 ### Configuration
 
