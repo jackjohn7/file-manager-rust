@@ -30,6 +30,8 @@ danger was opened.
 
 ### Actions
 
+Some of these require the addition of support for multi-button actions. Action composition.
+
 - Number keys allow a user to specify the yanking or cutting of multiple files/folders
 
 - <kbd>a</kbd> allows a user to create a new file
@@ -39,6 +41,8 @@ danger was opened.
   - <kbd>y</kbd> completes a yank
   - <kbd>ESC</kbd> cancels a yank
   - *Note*: In the case of name collision, a "(n)" is appended where $n$ is a counting integer.
+- <kbd>:</kbd> followed by a number and <kbd>ENTER</kbd> will jump to a line
+- <kbd>{</kbd> and <kbd>}</kbd> will jump down and up a page length respectively
 - <kbd>d</kbd> allows a user to delete a file or folder recursively
   - <kbd>d</kbd> allows a user to perform a cut
   - <kbd>ENTER</kbd> confirms
@@ -68,12 +72,12 @@ danger was opened.
 
 ## Controls
 
-- Use `h`, `j`, `k`, and `l` to navigate through directories
-- Use `b` and `t` to scroll to bottom and top respectively
-- Use `/` to begin searching
-  - `ESC` will exit search mode and reset search string
-    - *Note*: This is also how you remove your filter afterwards. `/-ESC`
-  - `ENTER` will exit search mode and apply search string
-- Use `n` to toggle the numbering of files
-- Use `f` to toggle display of full path for files
+- Use <kbd>h</kbd>, <kbd>j</kbd>, <kbd>k</kbd>, and <kbd>l</kbd> to navigate through directories
+- Use <kbd>b</kbd> and <kbd>t</kbd> to scroll to bottom and top respectively
+- Use <kbd>/</kbd> to begin searching
+  - <kbd>ESC</kbd> will exit search mode and reset search string
+    - *Note*: This is also how you remove your filter afterwards. <kbd>/-ESC</kbd>
+  - <kbd>ENTER</kbd> will exit search mode and apply search string
+- Use <kbd>n</kbd> to toggle the numbering of files
+- Use <kbd>f</kbd> to toggle display of full path for files
 
