@@ -47,25 +47,25 @@ pub fn add(left: usize, right: usize) -> usize {
 
 #[cfg(test)]
 mod tests {
-    use std::env::current_dir;
+    //use std::env::current_dir;
 
     use super::*;
 
-    #[test]
-    fn test_files_in_dir() {
-        let x = files_in_dir(current_dir().unwrap().as_path());
-        for item in x {
-            match item {
-                FolderItem::Directory(metadata) => {
-                    println!("Directory: jname: {}, loc: {:?}", metadata.name_str, metadata.path);
-                },
-                FolderItem::File(metadata) => {
-                    println!("File: name: {}, loc: {:?}", metadata.name_str, metadata.path);
-                }
-            }
-        }
-        panic!();
-    }
+    //#[test]
+    //fn test_files_in_dir() {
+    //    let x = files_in_dir(current_dir().unwrap().as_path());
+    //    for item in x {
+    //        match item {
+    //            FolderItem::Directory(metadata) => {
+    //                println!("Directory: jname: {}, loc: {:?}", metadata.name_str, metadata.path);
+    //            },
+    //            FolderItem::File(metadata) => {
+    //                println!("File: name: {}, loc: {:?}", metadata.name_str, metadata.path);
+    //            }
+    //        }
+    //    }
+    //    panic!();
+    //}
 
     #[test]
     fn it_works() {
