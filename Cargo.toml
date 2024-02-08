@@ -3,7 +3,7 @@
 
 members = [
   "gui",
-  "tui",
+  "danger",
   "utils",
   #"tauri"
 ]
