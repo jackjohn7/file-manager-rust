@@ -43,7 +43,8 @@ pub fn list_files(files: &[FolderItem], config: &AppConfig) -> String {
 pub fn ui(frame: &mut Frame, state: &mut AppState) {
     match state.mode {
         AppMode::Browse => browse_ui(frame, state),
-        AppMode::BrowseSearch => browse_search_ui(frame, state)
+        AppMode::BrowseSearch => browse_search_ui(frame, state),
+        AppMode::BrowseCommand => browse_command_ui(frame, state),
     }
 }
 
@@ -65,10 +66,7 @@ fn browse_ui(frame:&mut Frame, state: &mut AppState) {
         .collect();
 
     let block = Block::default()
-        .title(format!("{} Location: {}", match state.mode {
-            AppMode::Browse => "Browsing",
-            AppMode::BrowseSearch => "Searching"
-        }, current_dir().unwrap().to_str().unwrap()))
+        .title(format!("Browsing Location: {}", current_dir().unwrap().to_str().unwrap()))
         .borders(Borders::ALL);
 
     frame.render_widget(block.clone(), frame.size());
@@ -114,10 +112,7 @@ fn browse_search_ui(frame: &mut Frame, state: &mut AppState) {
         .collect();
 
     let file_block = Block::default()
-        .title(format!("{} Location: {}", match state.mode {
-            AppMode::Browse => "Browsing",
-            AppMode::BrowseSearch => "Searching"
-        }, current_dir().unwrap().to_str().unwrap()))
+        .title(format!("Searching Location: {}", current_dir().unwrap().to_str().unwrap()))
         .borders(Borders::ALL);
 
     frame.render_widget(file_block.clone(), layout[0]);
@@ -147,6 +142,65 @@ fn browse_search_ui(frame: &mut Frame, state: &mut AppState) {
         search_block_area.x,
         search_block_area.y + 1,
         search_block_area.width,
+        1,
+    ));
+}
+
+fn browse_command_ui(frame: &mut Frame, state: &mut AppState) {
+    let files = list_files(&state.files, &state.config);
+    let layout = Layout::default()
+        .direction(Direction::Vertical)
+        .constraints(vec![
+            Constraint::Percentage(85),
+            Constraint::Percentage(15),
+        ])
+        .split(frame.size());
+
+    let paragraphs: Vec<Paragraph> = files
+        .lines()
+        .enumerate()
+        //.filter(|(line_idx, _)| line_idx >= &state.scroll_offset)
+        .map(|(line_idx, line_txt)| {
+            if line_idx == state.line {
+                Paragraph::new(line_txt)
+                    .style(Style::new().white().on_blue().bold())
+            } else {
+                Paragraph::new(line_txt)
+            }
+        })
+        .collect();
+
+    let file_block = Block::default()
+        .title(format!("Executing in Location: {}", current_dir().unwrap().to_str().unwrap()))
+        .borders(Borders::ALL);
+
+    frame.render_widget(file_block.clone(), layout[0]);
+
+    let file_block_area = file_block.inner(layout[0]);
+    let paragraph_height = file_block_area.height.saturating_sub(2); // Adjust for borders
+    state.pg_height = Some(paragraph_height as usize);
+
+    // paragraph_height as usize +state.scroll_offset
+    for (i, paragraph) in paragraphs[state.scroll_offset..(match state.files.len().cmp(&state.pg_height.unwrap()) {
+        Ordering::Greater => state.pg_height.unwrap() + state.scroll_offset-1,
+        _ => state.files.len()
+    })].iter().take(paragraph_height as usize).enumerate() {
+        frame.render_widget(
+            paragraph.clone(),
+            Rect::new(file_block_area.x, file_block_area.y + i as u16, file_block_area.width, 1),
+        );
+    }
+    let command_block = Block::default()
+        .title("Command (ESC to Cancel, ENTER to Execute and resume browse)")
+        .borders(Borders::ALL);
+    let command_block_area = command_block.inner(layout[1]);
+    frame.render_widget(command_block.clone(), layout[1]);
+
+    let command_input = Paragraph::new(state.command_string.clone());
+    frame.render_widget(command_input, Rect::new(
+        command_block_area.x,
+        command_block_area.y + 1,
+        command_block_area.width,
         1,
     ));
 }

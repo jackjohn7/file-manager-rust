@@ -4,6 +4,7 @@ use crate::events::triggers::AppTrigger;
 pub enum AppMode {
     Browse,
     BrowseSearch,
+    BrowseCommand,
 }
 
 pub struct AppState {
@@ -14,6 +15,7 @@ pub struct AppState {
     pub trigger: Option<AppTrigger>,
     pub pg_height: Option<usize>,
     pub search_string: String,
+    pub command_string: String,
     pub config: AppConfig
 }
 

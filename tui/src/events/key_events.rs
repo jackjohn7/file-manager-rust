@@ -79,6 +79,10 @@ pub fn handle_events(state: &mut AppState) -> io::Result<bool> {
                             state.mode = AppMode::BrowseSearch;
                             state.search_string = String::new();
                         }
+                        else if key.kind == event::KeyEventKind::Press && key.code == KeyCode::Char(':') {
+                            state.mode = AppMode::BrowseCommand;
+                            state.command_string = String::new();
+                        }
                         else if key.kind == event::KeyEventKind::Press && key.code == KeyCode::Char('n') {
                             state.config.numbering = !state.config.numbering;
                         }
@@ -103,6 +107,28 @@ pub fn handle_events(state: &mut AppState) -> io::Result<bool> {
                         }
                         else if let KeyCode::Char(c) = key.code {
                             state.search_string.push(c);
+                        }
+                    }
+                    // WHEN IN BROWSECOMMAND MODE
+                    AppMode::BrowseCommand => {
+                        if key.kind == event::KeyEventKind::Press && key.code == KeyCode::Esc {
+                            state.mode = AppMode::Browse;
+                            state.command_string = String::new();
+                        }
+                        else if key.kind == event::KeyEventKind::Press && key.code == KeyCode::Backspace {
+                            state.command_string.pop();
+                        }
+                        else if key.kind == event::KeyEventKind::Press && key.code == KeyCode::Enter {
+                            // execute their command
+
+                            // trigger refresh
+                            state.trigger = Some(AppTrigger::Refresh);
+
+                            // resset mode
+                            state.mode = AppMode::Browse;
+                        }
+                        else if let KeyCode::Char(c) = key.code {
+                            state.command_string.push(c);
                         }
                     }
                 }

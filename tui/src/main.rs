@@ -42,6 +42,7 @@ fn main() -> io::Result<()> {
         trigger: None,
         pg_height: None,
         search_string: String::new(),
+        command_string: String::new(),
         config: AppConfig::default()
     };
     app_state.files = files_in_dir(current_dir().unwrap().as_path());
