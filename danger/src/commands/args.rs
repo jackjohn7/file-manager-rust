@@ -11,4 +11,7 @@ pub struct DangerArgs {
 
     #[arg(short, long, default_value_t=String::from("."))]
     pub input: String,
+
+    #[arg(short, long, action)]
+    pub source: bool,
 }

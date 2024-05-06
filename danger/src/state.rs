@@ -1,5 +1,5 @@
-use utils::FolderItem;
 use crate::events::triggers::AppTrigger;
+use utils::FolderItem;
 
 pub enum AppMode {
     Browse,
@@ -16,7 +16,7 @@ pub struct AppState {
     pub pg_height: Option<usize>,
     pub search_string: String,
     pub command_string: String,
-    pub config: AppConfig
+    pub config: AppConfig,
 }
 
 #[derive(Default)]
